@@ -9,7 +9,7 @@ function gameLogic(){
     var x = Math.round(Math.random() * 15);
     var y = Math.round(Math.random() * 15);
     if(field[x][y] == 0){
-        field[x][y] = 2;
+        //field[x][y] = 2;
         
     }
     postMessage({field});

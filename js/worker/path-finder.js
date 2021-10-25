@@ -1,7 +1,8 @@
 onmessage = function(e){
     const a = e.data.a;
     const b = e.data.b;
-    const field = e.data.field.map(x => x);
+    //const field = e.data.field.map(x => x);
+    const field = e.data.field;
 
     let done = false;
     let success = false;
@@ -15,91 +16,22 @@ onmessage = function(e){
     let cX = aX;//current y
     let cY = aY;//current y
 
-    let maxLoopCount = 5;
+    let maxLoopCount = 10;
+
+    //for debugging
+    let lX = 0;//last x
+    let lY = 0;//last y
 
     while(!done && maxLoopCount > 0){
-        let dX = 0;//direction x
-        let dY = 0;//direction y
         
-        if(cX < bX){
-            dX = 1;
-        } else if(cX > bX){
-            dX = -1;
-        }
-
-        if(cY < bY){
-            dY = 1;
-        } else if(cY > bY){
-            dY =-1;
-        }
-        let moved = 0;
-        let maxMoved = 0;
-        let maxMovedX = 0;
-        let maxMovedY = 0;
-
-        let yMoveOnX = cY;
-        for(let x = cX + dX; x != bX; x += dX){
-            console.log(`X X:${x} Y: ${yMoveOnX}`);
-
-            if(moved > maxMoved){
-                console.log(`MAX MOVED ${moved}`);
-                maxMoved = moved;
-                maxMovedX = x - dX;
-            }
-
-            if(field[x][yMoveOnX] != 0){
-                if(field[cX][yMoveOnX + dY] == 0){
-                    yMoveOnX += dY;
-                    x = cX;
-
-                    if(moved > maxMoved){
-                        console.log(`MAX MOVED ${moved}`);
-                        maxMoved = moved;
-                        maxMovedX = x - dX;
-                    }
-
-                    moved = 0;
-                    continue;
+        for(let x = 0; x < field.length; x++){
+            for(let y = 0; y < field[0].length; y++){
+                if(field[x][y] != 10){
+                    field[x][y] = 2;
                 }
-                break;
             }
-            ++moved;
         }
-        cX = maxMovedX;
-
-        moved = 0;
-        maxMoved = 0;
-        let xMoveOnY = cX;
-        for(let y = cY + dY; y != bY; y += dY){
-            console.log(`Y X:${xMoveOnY} Y: ${y}`);
-
-            if(moved > maxMoved){
-                console.log(`MAX MOVED ${moved}`);
-                maxMoved = moved;
-                maxMovedY = y - dY;
-            }
-
-            if(field[xMoveOnY][y] != 0){
-                
-                if(field[xMoveOnY + dX][y] == 0){
-                    xMoveOnY += dX;
-                    y = cY;
-
-                    if(moved > maxMoved){
-                        console.log(`MAX MOVED ${moved}`);
-                        maxMoved = moved;
-                        maxMovedY = y - dY;
-                    }
-
-                    moved = 0;
-                    continue;
-                }
-                break;
-            }
-            ++moved;
-        }
-        cY = maxMovedY;
-
+        done = true;
 
         maxLoopCount--;
     }
@@ -109,6 +41,7 @@ onmessage = function(e){
     }
 
     postMessage({
-        success : success
+        success : true,
+        field : field
     });
 }
